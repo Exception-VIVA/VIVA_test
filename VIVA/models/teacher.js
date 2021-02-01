@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    ta_IC: {
+    ta_id: {
       type: DataTypes.STRING(45),
       allowNull: false
     },

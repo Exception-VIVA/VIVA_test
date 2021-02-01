@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    stu_ID: {
+    stu_id: {
       type: DataTypes.STRING(45),
       allowNull: false
     },
@@ -19,9 +19,14 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(45),
       allowNull: false
     },
-    studentcol: {
-      type: DataTypes.STRING(45),
+    stu_grade: {
+      type: DataTypes.INTEGER,
       allowNull: true
+    },
+    stu_photo: {
+      type: DataTypes.STRING(45),
+      allowNull: true,
+      defaultValue: "https:\/\/i.ibb.co\/42SqfGY\/3dol.jpg"
     }
   }, {
     sequelize,

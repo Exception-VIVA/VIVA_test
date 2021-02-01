@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>회원 추가하기</h1>
+    <hr>
+
+    <form action="/board" method="POST">
+        <table>
+            <tr>
+                <td><input type="text" name="inputId" placeholder="아이디를 입력하세요."></td>
+            </tr>
+            <tr>
+                <td><input type="password" name="inputPw" placeholder="비밀번호를 입력하세요."></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="inputNick" placeholder="닉네임을 입력하세요."></td>
+            </tr>
+            <tr>
+                <td>
+                    <select name="inputGrade">
+                        <option value="1">1학년</option>
+                        <option value="2">2학년</option>
+                        <option value="3">3학년</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="text" name="inputPic" placeholder="이미지를 입력하세요."></td>
+            </tr>
+        </table>
+        <input type="submit" value="전송하기">
+    </form>
+    <table>
+        <tr>
+            <td>아이디</td>
+            <td>닉네임</td>
+            <td>학년</td>
+            <td>프로필 사진</td>
+        </tr>
+        <% for(let post of students) { %>
+            <tr>
+                <td>
+                    <%= post.stu_id %>
+                </td>
+                <td>
+                    <%= post.stu_nick %>
+                </td>
+                <td>
+                    <%= post.stu_grade %>
+                </td>
+                <td>
+                    <img src="<%= post.stu_photo %>" width="70" height="70"/>
+                </td>
+                <td><button ><a href="/edit/<%=post.stu_sn%>">수정하기</a></button></td>
+            
+                <form action="/board/<%=post.stu_sn%>?_method=DELETE" method="post">
+                    <td><input type="submit" value="삭제하기"></input></td>
+                </form>
+            </tr>
+            <% } %>
+    </table>
+</body>
+
+</html>

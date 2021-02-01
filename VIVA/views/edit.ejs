@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<h1>회원정보 수정</h1>
+<hr>
+
+<form action="/board/<%= post.stu_sn %>?_method=PUT" method="post">
+    <table>
+        <tr>
+            <td><input type="text" name="editId" value="<%= post.stu_id %>"></td>
+        </tr>
+        <tr>
+            <td><input type="password" name="editPw" value="<%= post.stu_pw %>"></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="editNick" value="<%= post.stu_nick %>"></td>
+        </tr>
+        <tr>
+            <td>
+                <select name="editGrade">
+                    <option value="1">1학년</option>
+                    <option value="2">2학년</option>
+                    <option value="3">3학년</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="text" name="editPic" value="<%= post.stu_photo %>"></td>
+        </tr>
+    </table>
+    <input type="submit" value="전송하기">
+</form>
+</body>
+</html>

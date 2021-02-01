@@ -25,7 +25,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     pbtype_sn: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'problemtype',
         key: 'pbtype_sn'
@@ -52,7 +52,7 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "pbtype_sn",
+        name: "problem_ibfk_2",
         using: "BTREE",
         fields: [
           { name: "pbtype_sn" },

@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     sol_ans: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     sol_img: {
       type: DataTypes.STRING(200),
