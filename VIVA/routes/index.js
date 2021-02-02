@@ -1,5 +1,6 @@
 var express = require('express');
 var models = require('../models');
+var crypto = require('crypto');
 var router = express.Router();
 
 /* GET home page. */
@@ -89,5 +90,33 @@ router.delete('/board/:id', function(req, res, next) {
     console.log(err);
   });
 });
+
+router.get('/sign_up', function(req, res, next) {
+  res.render("user/signup");
+});
+
+
+router.post("/sign_up", function(req,res,next){
+  let body = req.body;
+
+  let inputPassword = body.password;
+  let salt = Math.round((new Date().valueOf() * Math.random())) + "";
+  let hashPassword = crypto.createHash("sha512").update(inputPassword + salt).digest("hex");
+
+  let result = models.student.create({
+    stu_id: body.userId,
+    stu_pw: hashPassword,
+    stu_nick: body.userNick,
+    stu_grade: body.userGrade,
+    stu_photo: body.userPhoto,
+    salt: salt
+  })
+  .then( result => {
+    res.redirect("/sign_up");
+  })
+  .catch( err => {
+    console.log(err)
+  })
+})
 
 module.exports = router;
