@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     stu_pw: {
-      type: DataTypes.STRING(45),
+      type: DataTypes.STRING(200),
       allowNull: false
     },
     stu_nick: {
@@ -27,6 +27,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(45),
       allowNull: true,
       defaultValue: "https:\/\/i.ibb.co\/42SqfGY\/3dol.jpg"
+    },
+    salt: {
+      type: DataTypes.STRING(45),
+      allowNull: true
     }
   }, {
     sequelize,

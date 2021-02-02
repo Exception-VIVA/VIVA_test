@@ -1,12 +1,14 @@
 var models = require('../models');
 var crypto = require('crypto');
+const express = require('express');
+const router = express.Router();
 var Op = models.Sequelize.Op;
 
 //Register
-exports.create = (req, res) => {
+router.post('/', function(req, res, next) {
   let body = req.body;
 
-  if (!req.body.stu_id) {
+  if (!body.stu_id) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -36,10 +38,10 @@ exports.create = (req, res) => {
       err.message || "Some error occurred while creating the Tutorial."
     });
   });
-};
+});
 
 //Read
-exports.findAll = (req, res) => {
+router.get('/', function(req, res, next) {
   const id = req.query.id;
   var condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
 
@@ -53,10 +55,10 @@ exports.findAll = (req, res) => {
           err.message || "Some error occurred while retrieving tutorials."
       });
     });
-};
+});
 
 // Update a Tutorial by the id in the request
-exports.update = (req, res) => {
+router.put('/:id', function(req, res, next) {
   const id = req.params.id;
   let body = req.body;
 
@@ -83,10 +85,10 @@ exports.update = (req, res) => {
       });
       console.log(err);
     });
-};
+});
 
 // Delete
-exports.delete = (req, res) => {
+router.delete('/:id', function(req, res, next) {
   const id = req.params.id;
 
   models.student.destroy({
@@ -108,4 +110,6 @@ exports.delete = (req, res) => {
         message: "Could not delete Tutorial with id=" + id
       });
     });
-};
+});
+
+module.exports = router;
