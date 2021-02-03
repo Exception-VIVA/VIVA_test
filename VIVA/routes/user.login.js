@@ -9,7 +9,7 @@ router.post('/', async function (req, res, next) {
     let body = req.body;
 
     if(!body.stu_id){
-        res.send({
+        res.status(500).send({
             message: "student id is null"
         });
         return;
@@ -20,7 +20,6 @@ router.post('/', async function (req, res, next) {
             stu_id: body.stu_id
         }
     });
-    console.log(result.dataValues);
 
     let dbPassword = result.dataValues.stu_pw;
     let inputPassword = body.stu_pw;
@@ -29,11 +28,15 @@ router.post('/', async function (req, res, next) {
 
     if (dbPassword === hashPassword) {
         res.send({
-            message: "Login success"
+            message: "Login success",
+            status:'success',
+            data:{
+                stu_id:body.stu_id
+            }
         });
     }
     else {
-        res.send({
+        res.status(500).send({
             message: "Wrong Password"
         });
     }

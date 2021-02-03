@@ -2,7 +2,7 @@ var models = require('../models');
 var crypto = require('crypto');
 const express = require('express');
 const router = express.Router();
-var Op = models.Sequelize.Op;
+//var Op = models.Sequelize.Op;
 
 //Register
 router.post('/', async function (req, res, next) {
@@ -42,7 +42,10 @@ router.post('/', async function (req, res, next) {
 
   models.student.create(userInfo)
     .then(result => {
-      res.send(result);
+      // res.send(result);
+      res.send({
+        status:'success',
+      })
     })
     .catch(err => {
       res.status(500).send({
@@ -55,11 +58,11 @@ router.post('/', async function (req, res, next) {
 //Read
 router.get('/', function (req, res, next) {
   const id = req.query.id;
-  var condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
+  //var condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
 
   models.student.findAll()
     .then(data => {
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch(err => {
       res.status(500).send({
@@ -83,11 +86,11 @@ router.put('/:id', function (req, res, next) {
   })
     .then(num => {
       if (num == 1) {
-        res.send({
+        res.status(200).send({
           message: "UserInfo was updated successfully."
         });
       } else {
-        res.send({
+        res.status(500).send({
           message: `Cannot update UserInfo with id=${id}. Maybe Tutorial was not found or req.body is empty!`
         });
       }
@@ -109,11 +112,11 @@ router.delete('/:id', function (req, res, next) {
   })
     .then(num => {
       if (num == 1) {
-        res.send({
+        res.status(200).send({
           message: "Tutorial was deleted successfully!"
         });
       } else {
-        res.send({
+        res.status(500).send({
           message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
         });
       }
