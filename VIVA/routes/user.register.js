@@ -21,9 +21,10 @@ router.post('/', async function (req, res, next) {
     }
   })
   if(exUser){
-    res.status(500).send({
-      message: "duplicate id!"
-    });
+    res.send({
+      message: "duplicate id!",
+      status:'duplicate',
+  });
     return;
   }
 
