@@ -5,12 +5,24 @@ const router = express.Router();
 var Op = models.Sequelize.Op;
 
 //Register
-router.post('/', function(req, res, next) {
+router.post('/', async function (req, res, next) {
   let body = req.body;
 
   if (!body.stu_id) {
     res.status(400).send({
       message: "Content can not be empty!"
+    });
+    return;
+  }
+
+  let exUser = await models.student.findOne({
+    where: {
+      stu_id: body.stu_id
+    }
+  })
+  if(exUser){
+    res.status(500).send({
+      message: "duplicate id!"
     });
     return;
   }
@@ -29,19 +41,19 @@ router.post('/', function(req, res, next) {
   }
 
   models.student.create(userInfo)
-  .then( result => {
-    res.send(result);
-  })
-  .catch( err => {
-    res.status(500).send({
-      message:
-      err.message || "Some error occurred while creating the Tutorial."
+    .then(result => {
+      res.send(result);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the Tutorial."
+      });
     });
-  });
 });
 
 //Read
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   const id = req.query.id;
   var condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
 
@@ -58,14 +70,15 @@ router.get('/', function(req, res, next) {
 });
 
 // Update a Tutorial by the id in the request
-router.put('/:id', function(req, res, next) {
+router.put('/:id', function (req, res, next) {
   const id = req.params.id;
   let body = req.body;
 
   models.student.update({
     stu_nick: body.stu_nick,
     stu_grade: body.stu_grade,
-    stu_photo: body.stu_photo},{
+    stu_photo: body.stu_photo
+  }, {
     where: { stu_sn: id }
   })
     .then(num => {
@@ -88,7 +101,7 @@ router.put('/:id', function(req, res, next) {
 });
 
 // Delete
-router.delete('/:id', function(req, res, next) {
+router.delete('/:id', function (req, res, next) {
   const id = req.params.id;
 
   models.student.destroy({
