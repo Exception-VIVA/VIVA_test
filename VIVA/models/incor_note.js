@@ -1,35 +1,32 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('workbook', {
-    workbook_sn: {
+  return sequelize.define('incor_note', {
+    note_sn: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    workbook_title: {
+    stu_sn: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    note_name: {
       type: DataTypes.STRING(45),
       allowNull: false
     },
-    workbook_year: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    workbook_month: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    workbook_publisher: {
-      type: DataTypes.STRING(45),
-      allowNull: false
-    },
-    workbook_photo: {
+    note_photo: {
       type: DataTypes.STRING(200),
       allowNull: true
+    },
+    note_date: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
     }
   }, {
     sequelize,
-    tableName: 'workbook',
+    tableName: 'incor_note',
     timestamps: false,
     indexes: [
       {
@@ -37,7 +34,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "workbook_sn" },
+          { name: "note_sn" },
         ]
       },
     ]

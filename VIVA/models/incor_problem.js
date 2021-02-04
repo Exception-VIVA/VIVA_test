@@ -30,6 +30,14 @@ module.exports = function(sequelize, DataTypes) {
         model: 'solution',
         key: 'sol_sn'
       }
+    },
+    note_sn: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'incor_note',
+        key: 'note_sn'
+      }
     }
   }, {
     sequelize,
@@ -63,6 +71,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "sol_sn" },
+        ]
+      },
+      {
+        name: "note_sn",
+        using: "BTREE",
+        fields: [
+          { name: "note_sn" },
         ]
       },
     ]

@@ -9,7 +9,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const session = require('express-session');
+//const session = require('express-session');
 
 const app = express();
 
@@ -25,15 +25,15 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(session({
-  key: 'sid',
-  secret: 'secret',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    maxAge: 24000 * 60 * 60 // 쿠키 유효기간 24시간
-  }
-}));
+// app.use(session({
+//   key: 'sid',
+//   secret: 'secret',
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: {
+//     maxAge: 24000 * 60 * 60 // 쿠키 유효기간 24시간
+//   }
+// }));
 
 // simple route
 app.get("/", (req, res) => {
@@ -42,8 +42,10 @@ app.get("/", (req, res) => {
 
 var register = require("./routes/user.register");
 var login = require("./routes/user.login");
+var home = require("./routes/home");
 app.use('/api/user/register', register);
 app.use('/api/user/login', login);
+app.use('/api/home', home);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3001;
