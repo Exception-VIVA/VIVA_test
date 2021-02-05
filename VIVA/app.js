@@ -40,12 +40,12 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
 
-var register = require("./routes/user.register");
-var login = require("./routes/user.login");
-var home = require("./routes/home");
-app.use('/api/user/register', register);
-app.use('/api/user/login', login);
-app.use('/api/home', home);
+// var register = require("./routes/user.register");
+// var login = require("./routes/user.login");
+// var home = require("./routes/home");
+app.use('/api/user/register', require("./routes/user.register"));
+app.use('/api/user/login', require("./routes/user.login"));
+app.use('/api/home', require("./routes/home"));
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3001;

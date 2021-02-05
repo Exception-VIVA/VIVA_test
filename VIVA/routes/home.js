@@ -14,7 +14,7 @@ async function retrieveBook(workbooks, res) {
     if (workbooks.length != 0) { //교재 있냐?
         var bookInfo = new Array();
         for (var i in workbooks) {
-            let temp = await models.workbook.findAll({
+            let temp = await models.workbook.findOne({
                 where: {
                     workbook_sn: workbooks[i].dataValues.workbook_sn
                 }
@@ -57,7 +57,7 @@ router.get('/', async function (req, res, next) {
 
     if (result) {
         //유저 정보
-        const retrivedUser = {
+        const retrievedUser = {
             stu_nick: result.dataValues.stu_nick,
             stu_grade: result.dataValues.stu_grade,
             stu_photo: result.dataValues.stu_photo
@@ -66,7 +66,7 @@ router.get('/', async function (req, res, next) {
             message: "Retrieve data",
             status: 'success',
             data: {
-                retrivedUser
+                retrievedUser
             }
         });
     }
@@ -141,12 +141,22 @@ router.get('/incor-note', async function (req, res, next) {
     });
 
     if (bookInfo.length != 0) {
+        var pbCount = new Array();
+        for(var i in bookInfo){
+            var temp = await models.incor_problem.count({
+                where: {
+                    note_sn: bookInfo[i].dataValues.note_sn
+                }
+            });
+            pbCount.push(temp);
+        }
         try {
             res.send({ //교재 정보 넘김
                 message: "Retrieve books",
                 status: 'success',
                 data: {
-                    bookInfo
+                    bookInfo,
+                    pbCount
                 }
             });
         } catch (err) { //무언가 문제가 생김
