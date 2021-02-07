@@ -78,6 +78,7 @@ router.get('/', async function (req, res, next) {
 });
 
 //localhost:3001/api/home/workbook?stu_id=samdol
+//localhost:3001/api/book-list/workbook?stu_id=samdol
 router.get('/workbook', async function (req, res, next) {
     const input_stu_id = req.query.stu_id;
 
@@ -101,6 +102,7 @@ router.get('/workbook', async function (req, res, next) {
 });
 
 //localhost:3001/api/home/academy?stu_id=samdol
+//localhost:3001/api/book-list/academy?stu_id=samdol
 router.get('/academy', async function (req, res, next) {
     const input_stu_id = req.query.stu_id;
 
@@ -124,6 +126,7 @@ router.get('/academy', async function (req, res, next) {
 });
 
 //localhost:3001/api/home/incor-note?stu_id=samdol
+//localhost:3001/api/book-list/incor-note?stu_id=samdol
 router.get('/incor-note', async function (req, res, next) {
     const input_stu_id = req.query.stu_id;
 
