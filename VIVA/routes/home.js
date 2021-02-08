@@ -177,4 +177,40 @@ router.get('/incor-note', async function (req, res, next) {
     }
 });
 
+//오답노트를 홈에서도 추가할 수 있고, 리스트에서도 추가할 수 있으니까...
+//localhost:3001/api/home/incor-note/create?stu_id=samdol
+//localhost:3001/api/book-list/incor-note/create?stu_id=samdol
+router.post('/incor-note/create', async function (req, res, next) {
+    const input_stu_id = req.query.stu_id;
+    let body = req.body;
+
+    let result = await models.student.findOne({
+        where: {
+            stu_id: input_stu_id
+        }
+    });
+
+    models.incor_note.create({ //이름, 사진, 학생 입력함. 생성 날짜는 자동으로 들어감
+        stu_sn: result.dataValues.stu_sn,
+        note_name: body.note_name,
+        note_photo: body.note_photo
+    })
+    .then(result => {
+        res.send({
+          message: 'Inserted in DB',
+          status:'success',
+          data:{ //result는 그냥 내가 postman에서 보려고 넣은거라 실제로 쓸 때는 빼도 괜찮음.
+              result
+          }
+        })
+      })
+      .catch(err => { //무슨 문제가 생겼을까...
+        res.send({
+          message:
+            err.message || "Some error occurred while insert data.",
+          status:'fail'
+        });
+      });
+});
+
 module.exports = router;

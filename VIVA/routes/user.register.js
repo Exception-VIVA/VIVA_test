@@ -73,37 +73,6 @@ router.get('/', function (req, res, next) {
     });
 });
 
-// Update a Tutorial by the id in the request
-router.put('/:id', function (req, res, next) {
-  const id = req.params.id;
-  let body = req.body;
-
-  models.student.update({
-    stu_nick: body.stu_nick,
-    stu_grade: body.stu_grade,
-    stu_photo: body.stu_photo
-  }, {
-    where: { stu_sn: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.status(200).send({
-          message: "UserInfo was updated successfully."
-        });
-      } else {
-        res.status(500).send({
-          message: `Cannot update UserInfo with id=${id}. Maybe Tutorial was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error updating UserInfo with id=" + id
-      });
-      console.log(err);
-    });
-});
-
 // Delete
 router.delete('/:id', function (req, res, next) {
   const id = req.params.id;

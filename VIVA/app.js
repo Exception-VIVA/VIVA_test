@@ -42,10 +42,12 @@ app.get("/", (req, res) => {
 
 app.use('/api/user/register', require("./routes/user.register"));
 app.use('/api/user/login', require("./routes/user.login"));
+app.use('/api/user/profile', require("./routes/user.profile"));
 app.use('/api/home', require("./routes/home"));
 app.use('/api/search', require("./routes/search"));
 app.use('/api/book-list', require("./routes/home"));
 app.use('/api/book-list', require("./routes/book-list"));
+app.use('/api/incor-note-content', require("./routes/incor-note-content"));
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3001;
