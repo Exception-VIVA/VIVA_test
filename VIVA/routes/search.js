@@ -4,15 +4,22 @@ const router = express.Router();
 var Op = models.Sequelize.Op;
 
 //Search
-//localhost:3001/api/search?title=수능&stu_sn=41
+//localhost:3001/api/search?title=수능&stu_id=samdol
 router.get('/', async function (req, res, next) {
     const search = req.query.title; //검색어
+    const input_stu_id = req.query.stu_id;
+
+    let result = await models.student.findOne({
+        where: {
+            stu_id: input_stu_id
+        }
+    });
 
     //사용자가 보유한 책의 workbook_sn 끌올
     let user_books = await models.stu_workbook.findAll({
         attributes: ['workbook_sn'],
         where: {
-            stu_sn: req.query.stu_sn
+            stu_sn: result.dataValues.stu_sn
         }
     });
 
@@ -58,12 +65,20 @@ router.get('/', async function (req, res, next) {
 });
 
 //Search
-//localhost:3001/api/search?title=수능&stu_sn=41
+//localhost:3001/api/search?title=수능&stu_id=samdol
 router.post('/', async function (req, res, next) {
     const search = req.query.title; //검색어
-    const user = req.query.stu_sn;
     let body = req.body;
     let isWorkbook=true;
+    const input_stu_id = req.query.stu_id;
+
+    let result = await models.student.findOne({
+        where: {
+            stu_id: input_stu_id
+        }
+    });
+
+    const user = result.dataValues.stu_sn;
 
     //body로 넘겨준 workbook_sn에 해당하는 문제집 찾기. body로 workbook_sn만 넘겨주면 됨
     let selected_book = await models.workbook.findOne({
