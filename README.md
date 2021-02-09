@@ -1,2 +1,2 @@
-# VIVA_test  
-node.js와 친해지는 중
+# VIVA_test
+VIVA의 백엔드입니담
