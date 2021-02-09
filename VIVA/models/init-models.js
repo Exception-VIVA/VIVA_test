@@ -8,6 +8,8 @@ var _stu_workbook = require("./stu_workbook");
 var _student = require("./student");
 var _stuta_map = require("./stuta_map");
 var _teacher = require("./teacher");
+var _test = require("./test");
+var _test_pb_map = require("./test_pb_map");
 var _workbook = require("./workbook");
 
 function initModels(sequelize) {
@@ -20,6 +22,8 @@ function initModels(sequelize) {
   var student = _student(sequelize, DataTypes);
   var stuta_map = _stuta_map(sequelize, DataTypes);
   var teacher = _teacher(sequelize, DataTypes);
+  var test = _test(sequelize, DataTypes);
+  var test_pb_map = _test_pb_map(sequelize, DataTypes);
   var workbook = _workbook(sequelize, DataTypes);
 
   incor_problem.belongsTo(incor_note, { foreignKey: "note_sn"});
@@ -42,6 +46,12 @@ function initModels(sequelize) {
   student.hasMany(stuta_map, { foreignKey: "stu_sn"});
   stuta_map.belongsTo(teacher, { foreignKey: "ta_sn"});
   teacher.hasMany(stuta_map, { foreignKey: "ta_sn"});
+  test.belongsTo(student, { foreignKey: "stu_sn"});
+  student.hasMany(test, { foreignKey: "stu_sn"});
+  test_pb_map.belongsTo(problem, { foreignKey: "pb_sn"});
+  problem.hasMany(test_pb_map, { foreignKey: "pb_sn"});
+  test_pb_map.belongsTo(test, { foreignKey: "test_sn"});
+  test.hasMany(test_pb_map, { foreignKey: "test_sn"});
 
   return {
     incor_note,
@@ -53,6 +63,8 @@ function initModels(sequelize) {
     student,
     stuta_map,
     teacher,
+    test,
+    test_pb_map,
     workbook,
   };
 }
