@@ -178,9 +178,9 @@ router.get('/incor-note', async function (req, res, next) {
 });
 
 //오답노트를 홈에서도 추가할 수 있고, 리스트에서도 추가할 수 있으니까...
-//localhost:3001/api/home/incor-note/create?stu_id=samdol
-//localhost:3001/api/book-list/incor-note/create?stu_id=samdol
-router.post('/incor-note/create', async function (req, res, next) {
+//localhost:3001/api/home/incor-note?stu_id=samdol
+//localhost:3001/api/book-list/incor-note?stu_id=samdol
+router.post('/incor-note', async function (req, res, next) {
     const input_stu_id = req.query.stu_id;
     let body = req.body;
 
