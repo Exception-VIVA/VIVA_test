@@ -15,6 +15,13 @@ router.get('/:pb', async function (req, res, next) {
     });
     const user = result.dataValues.stu_sn;
 
+    //노트 이름
+    let title = await models.incor_note.findOne({
+        where: {
+            note_sn: req.query.note_sn
+        }
+    })
+
     //전체 문제 수
     let pbCount = await models.incor_problem.count({
         where: {
@@ -56,8 +63,9 @@ router.get('/:pb', async function (req, res, next) {
         }
     });
 
-    //문제 정보 : 전체 문제 수, 지금 문제가 몇번째 문제인지, 문제 이미지, 답안, 답 이미지
+    //문제 정보 : 노트이름, 전체 문제 수, 지금 문제가 몇번째 문제인지, 문제 이미지, 답안, 답 이미지
     const pbInfo = {
+        title: title.dataValues.note_name,
         total_pb: pbCount,
         now_pb: pb,
         pb_img: pb_img.dataValues.pb_img,
