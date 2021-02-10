@@ -24,7 +24,7 @@ router.get('/', async function (req, res, next) {
     });
 
     var book_list = new Array(); //끌올한 workbook_sn을 book_list에 배열로 저장
-    for(var i in user_books){
+    for (var i in user_books) {
         book_list.push(user_books[i].dataValues.workbook_sn);
     }
 
@@ -72,7 +72,7 @@ router.get('/', async function (req, res, next) {
 router.post('/', async function (req, res, next) {
     const search = req.query.title; //검색어
     let body = req.body;
-    let isWorkbook=true;
+    let isWorkbook = true;
     const input_stu_id = req.query.stu_id;
 
     let result = await models.student.findOne({
@@ -85,13 +85,13 @@ router.post('/', async function (req, res, next) {
 
     //body로 넘겨준 workbook_sn에 해당하는 문제집 찾기. body로 workbook_sn만 넘겨주면 됨
     let selected_book = await models.workbook.findOne({
-        where : {
+        where: {
             workbook_sn: body.workbook_sn
         }
     });
 
     //해당 책이 일반 교재인지 학원 교재인지 판단. isWorkbook이 true면 일반 교재고, 아니면 학원 교재임
-    if(body.workbook_sn>=1000000){
+    if (body.workbook_sn >= 1000000) {
         isWorkbook = false;
     }
 
@@ -100,23 +100,23 @@ router.post('/', async function (req, res, next) {
         workbook_sn: selected_book.dataValues.workbook_sn,
         stu_sn: user
     })
-    .then(result => {
-      res.send({
-        message: 'Inserted in DB',
-        status:'success',
-        data:{ //result는 그냥 내가 postman에서 보려고 넣은거라 실제로 쓸 때는 빼고 isWorkbook만 가져가도 괜찮음.
-            result,
-            isWorkbook
-        }
-      })
-    })
-    .catch(err => {
-      res.send({
-        message:
-          err.message || "Some error occurred while insert data.",
-        status:'fail'
-      });
-    });
+        .then(result => {
+            res.send({
+                message: 'Inserted in DB',
+                status: 'success',
+                data: { //result는 그냥 내가 postman에서 보려고 넣은거라 실제로 쓸 때는 빼고 isWorkbook만 가져가도 괜찮음.
+                    result,
+                    isWorkbook
+                }
+            })
+        })
+        .catch(err => {
+            res.send({
+                message:
+                    err.message || "Some error occurred while insert data.",
+                status: 'fail'
+            });
+        });
 });
 
 module.exports = router;

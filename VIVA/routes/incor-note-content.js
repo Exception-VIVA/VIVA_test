@@ -20,7 +20,7 @@ router.get('/:pb', async function (req, res, next) {
         where: {
             note_sn: req.query.note_sn
         }
-    })
+    });
 
     //전체 문제 수
     let pbCount = await models.incor_problem.count({
