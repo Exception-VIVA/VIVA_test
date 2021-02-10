@@ -24,7 +24,7 @@ router.get('/', async function (req, res, next) {
     });
 
     var book_list = new Array(); //끌올한 workbook_sn을 book_list에 배열로 저장
-    for(var i in user_books){
+    for (var i in user_books) {
         book_list.push(user_books[i].dataValues.workbook_sn);
     }
 
@@ -101,23 +101,21 @@ router.post('/', async function (req, res, next) {
         workbook_sn: selected_book.dataValues.workbook_sn,
         stu_sn: user
     })
-    .then(result => {
-      res.send({
-        message: 'Inserted in DB',
-        status:'success',
-        data:{ //result는 그냥 내가 postman에서 보려고 넣은거라 실제로 쓸 때는 빼고 isWorkbook만 가져가도 괜찮음.
-            result,
-            isWorkbook
-        }
-      })
-    })
-    .catch(err => {
-      res.send({
-        message:
-          err.message || "Some error occurred while insert data.",
-        status:'fail'
-      });
-    });
+        .then(result => {
+            res.send({
+                message: 'Inserted in DB',
+                status:'success',
+                data:{ //result는 그냥 내가 postman에서 보려고 넣은거라 실제로 쓸 때는 빼고 isWorkbook만 가져가도 괜찮음.
+                    result,
+                    isWorkbook
+                }
+            })
+        })
+        .catch(err => {
+            res.send({
+                message:
+                    err.message || "Some error occurred while insert data.",
+                status:'fail'
+            });
+        });
 });
-
-module.exports = router;
