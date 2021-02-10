@@ -68,12 +68,13 @@ router.get('/', async function (req, res, next) {
 });
 
 //Search
-//localhost:3001/api/search?title=수능&stu_id=samdol
+//localhost:3001/api/search
 router.post('/', async function (req, res, next) {
-    const search = req.query.title; //검색어
+    // const search = req.query.title; //검색어
     let body = req.body;
+
     let isWorkbook=true;
-    const input_stu_id = req.query.stu_id;
+    const input_stu_id = body.stu_id;
 
     let result = await models.student.findOne({
         where: {
