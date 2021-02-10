@@ -58,6 +58,7 @@ router.get('/', async function (req, res, next) {
     if (result) {
         //유저 정보
         const retrievedUser = {
+            stu_id: input_stu_id,
             stu_nick: result.dataValues.stu_nick,
             stu_grade: result.dataValues.stu_grade,
             stu_photo: result.dataValues.stu_photo
