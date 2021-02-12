@@ -71,6 +71,20 @@ router.post('/', async function (req, res, next) {
     });
     const user = result.dataValues.stu_sn;
 
+    //제목 중복 확인
+    let isExist = await models.test.findOne({
+        where: {
+            test_title: body.test_title
+        }
+    })
+    if(isExist){
+        res.send({
+          message: "duplicate test name!",
+          status:'duplicate',
+      });
+        return;
+      }
+
     //모의고사 생성
     let sn; //생성된 모의고사의 sn
     models.test.create({
