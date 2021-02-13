@@ -8,8 +8,12 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true
     },
     pb_sn: {
-      type: DataTypes.STRING(45),
-      allowNull: false
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'problem',
+        key: 'pb_sn'
+      }
     },
     sol_ans: {
       type: DataTypes.INTEGER,
@@ -30,6 +34,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "sol_sn" },
+        ]
+      },
+      {
+        name: "pb_sn",
+        using: "BTREE",
+        fields: [
+          { name: "pb_sn" },
         ]
       },
     ]

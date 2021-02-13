@@ -38,6 +38,8 @@ function initModels(sequelize) {
   problemtype.hasMany(problem, { foreignKey: "pbtype_sn"});
   problem.belongsTo(workbook, { foreignKey: "workbook_sn"});
   workbook.hasMany(problem, { foreignKey: "workbook_sn"});
+  solution.belongsTo(problem, { foreignKey: "pb_sn"});
+  problem.hasMany(solution, { foreignKey: "pb_sn"});
   stu_workbook.belongsTo(student, { foreignKey: "stu_sn"});
   student.hasMany(stu_workbook, { foreignKey: "stu_sn"});
   stu_workbook.belongsTo(workbook, { foreignKey: "workbook_sn"});

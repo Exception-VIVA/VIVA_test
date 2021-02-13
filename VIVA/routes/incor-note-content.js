@@ -3,9 +3,14 @@ const express = require('express');
 const router = express.Router();
 var Op = models.Sequelize.Op;
 
+function info(pb_img, sol_ans, sol_img){
+    this.pb_img = pb_img;
+    this.sol_ans = sol_ans;
+    this.sol_img = sol_img;
+}
 
 //오답노트 문제 가져오기 (전부)
-//localhost:3001/api/incor-note-content/note_sn=1&stu_i
+//localhost:3001/api/incor-note-content?note_sn=7&stu_id=samdol
 router.get('/', async function (req, res, next) {
     // const pb = req.params.pb;
 
@@ -40,38 +45,35 @@ router.get('/', async function (req, res, next) {
         return;
     }
 
+    let pb_info = new Array(pbCount);
+
+    models.incor_problem.belongsTo(models.problem, { foreignKey: "pb_sn" });
+    models.problem.hasMany(models.incor_problem, { foreignKey: "pb_sn" });
+    models.solution.belongsTo(models.problem, { foreignKey: "pb_sn"});
+    models.problem.hasMany(models.solution, { foreignKey: "pb_sn"});
+
     //문제들
     let problems = await models.incor_problem.findAll({
+        attributes: [],
+        include: [
+            {
+                model: models.problem,
+                attributes: ['pb_img'],
+                include: [
+                    {
+                        model: models.solution,
+                        attributes: ['sol_ans', 'sol_img']
+                    }
+                ]
+            }
+        ],
         where: {
             note_sn: req.query.note_sn,
             stu_sn: user
         }
     });
-
-    //문제 이미지
-    let pb_img = await models.problem.findAll({
-        attributes: ['pb_img'],
-        where: {
-            pb_sn: problems.dataValues.pb_sn
-        }
-    });
-
-    //답 정보(답안, 풀이 이미지)
-    let sols = await models.solution.findAll({
-        attributes: ['sol_ans', 'sol_img'],
-        where: {
-            sol_sn: problems.dataValues.sol_sn
-        }
-    });
-
-    //문제 정보 : 노트이름, 전체 문제 수, 지금 문제가 몇번째 문제인지, 문제 이미지, 답안, 답 이미지
-    const pbInfo = {
-        title: title.dataValues.note_name,
-        total_pb: pbCount,
-        now_pb: pb,
-        pb_img: pb_img.dataValues.pb_img,
-        sol_ans: sols.dataValues.sol_ans,
-        sol_img: sols.dataValues.sol_img
+    for(var i in problems){
+        pb_info[i] = new info(problems[i].problem.pb_img, problems[i].problem.solutions[0].sol_ans, problems[i].problem.solutions[0].sol_img)
     }
 
     try {
@@ -79,7 +81,8 @@ router.get('/', async function (req, res, next) {
             message: "problem information",
             status: 'success',
             data: {
-                pbInfo
+                title,
+                pb_info
             }
         });
     } catch (err) { //무언가 문제가 생김
