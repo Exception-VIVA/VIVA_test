@@ -104,13 +104,13 @@ router.delete('/incor-note/:sn', async function (req, res, next) {
 // Update incor-note
 //localhost:3001/api/book-list/incor-note/'수정할 note_sn'?stu_id=samdol
 router.put('/incor-note/:sn', async function (req, res, next) {
-    const input_stu_id = req.query.stu_id;
+    // const input_stu_id = req.query.stu_id;
     const sn = req.params.sn;
     let body = req.body;
 
     let result = await models.student.findOne({
         where: {
-            stu_id: input_stu_id
+            stu_id: body.stu_id
         }
     });
 
@@ -118,14 +118,14 @@ router.put('/incor-note/:sn', async function (req, res, next) {
         note_name: body.note_name,
         note_photo: body.note_photo
     }, {
-        where: { 
+        where: {
             stu_sn: result.dataValues.stu_sn,
             note_sn: sn
          }
     })
         .then(num => {
             if (num == 1) { //성공
-                res.send({ 
+                res.send({
                     message: "incor_note was updated successfully.",
                     status: 'success'
                 });
