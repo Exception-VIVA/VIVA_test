@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 var Op = models.Sequelize.Op;
 
-function info(pb_img, sol_ans, sol_img){
+function info(pb_img, sol_ans, sol_img){ //문제정보 구조체
     this.pb_img = pb_img;
     this.sol_ans = sol_ans;
     this.sol_img = sol_img;
