@@ -50,6 +50,7 @@ app.use('/api/book-list', require("./routes/book-list"));
 app.use('/api/incor-note-content', require("./routes/incor-note-content"));
 app.use('/api/test/form', require("./routes/test.form"));
 app.use('/api/test/list', require("./routes/test.list"));
+app.use('/api/paper-upload', require("./routes/paper-upload"));
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3001;
