@@ -8,13 +8,14 @@ function printJson(json){
     console.log(json);
 }
 
-router.get('/', function (req, res, next) {
-    const file_name = req.query.file_name;
+router.post('/', function (req, res, next) {
+    let body = req.body;
+    const file_name = body.file_name
 
     const YoloResult = (callback)=>{
         const options = {
-            method: 'GET',
-            uri: "http://127.0.0.1:5000/scoring-yolo",
+            method: 'POST',
+            uri: "http://127.0.0.1:5000/yolo",
             qs: {
                 file_name: file_name
             }
@@ -35,15 +36,15 @@ router.get('/', function (req, res, next) {
                 status: "fail"
             });
         }
-        const json = JSON.parse(result);
+        // json = JSON.parse(result);
         res.send({
             message: "from flask",
             status: "success",
             data:{
-                flask : json
+                flask : result
             }
         });
-        printJson(json);
+        //printJson(json);
     })
 
 });
