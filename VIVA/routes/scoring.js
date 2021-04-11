@@ -15,7 +15,7 @@ router.post('/', function (req, res, next) {
     const YoloResult = (callback)=>{
         const options = {
             method: 'POST',
-            uri: "http://127.0.0.1:5000/yolo",
+            uri: "http://127.0.0.1:5000/test",
             qs: {
                 file_name: file_name
             }
@@ -36,12 +36,12 @@ router.post('/', function (req, res, next) {
                 status: "fail"
             });
         }
-        // json = JSON.parse(result);
+        let json = JSON.parse(result);
         res.send({
             message: "from flask",
             status: "success",
             data:{
-                flask : result
+                json
             }
         });
         //printJson(json);
