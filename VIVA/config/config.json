@@ -1,0 +1,30 @@
+{
+  "development": {
+    "username": "vivaadmin",
+    "password": "viva1886!!",
+    "database": "VIVA",
+    "host": "viva.c9birts7afmc.us-east-2.rds.amazonaws.com",
+    "dialect": "mysql",
+    "operatorsAliases": false,
+    "define": {
+      "timestamps": false,
+      "underscored": true
+    }
+  },
+  "test": {
+    "username": "vivaadmin",
+    "password": "viva1886!!",
+    "database": "VIVA",
+    "host": "viva.c9birts7afmc.us-east-2.rds.amazonaws.com",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  },
+  "production": {
+    "username": "vivaadmin",
+    "password": "viva1886!!",
+    "database": "VIVA",
+    "host": "viva.c9birts7afmc.us-east-2.rds.amazonaws.com",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  }
+}
