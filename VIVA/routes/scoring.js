@@ -10,12 +10,14 @@ function printJson(json){
 
 router.post('/', function (req, res, next) {
     let body = req.body;
-    const file_name = body.file_name
+    const file_name = body.file_name;
+    const split_file_name = file_name.split(',');
+    const w_sn = split_file_name[0]; //workbook_sn
 
     const YoloResult = (callback)=>{
         const options = {
             method: 'POST',
-            uri: "http://127.0.0.1:5000/test",
+            uri: "http://127.0.0.1:5000/yolo",
             qs: {
                 file_name: file_name
             }
@@ -41,7 +43,8 @@ router.post('/', function (req, res, next) {
             message: "from flask",
             status: "success",
             data:{
-                json
+                json,
+                w_sn
             }
         });
         //printJson(json);
