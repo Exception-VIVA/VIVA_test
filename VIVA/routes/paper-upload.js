@@ -1,5 +1,4 @@
 var models = require('../models');
-var request = require('request');
 const express = require('express');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
@@ -39,26 +38,5 @@ router.post("/", upload.array('mark'), (req, res) => {
         })
     }
 });
-
-// router.get("/scoring", async function (req, res) {
-//     const file_name = req.query.file_name;
-//     let result;
-//
-//     const options = {
-//         method: 'GET',
-//         uri: "http://127.0.0.1:5000/scoring-yolo",
-//         qs: {
-//             file_name: file_name
-//         }
-//     }
-//
-//     await request(options, async function (err, res, body) {
-//         if (err)
-//             console.log("error!!");
-//         result = body;
-//         console.log(result);
-//         return result
-//     });
-// })
 
 module.exports = router;

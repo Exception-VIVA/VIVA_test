@@ -1,15 +1,6 @@
-// var createError = require('http-errors');
-// var express = require('express');
-// var path = require('path');
-// var cookieParser = require('cookie-parser');
-// var logger = require('morgan');
-// var methodOverride = require('method-override');
-// var bodyParser = require('body-parser');
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-//const session = require('express-session');
 
 const app = express();
 
@@ -24,16 +15,6 @@ app.use(bodyParser.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// app.use(session({
-//   key: 'sid',
-//   secret: 'secret',
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: {
-//     maxAge: 24000 * 60 * 60 // 쿠키 유효기간 24시간
-//   }
-// }));
 
 // simple route
 app.get("/", (req, res) => {
