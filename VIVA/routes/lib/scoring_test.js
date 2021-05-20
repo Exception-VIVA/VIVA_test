@@ -1,7 +1,7 @@
+var models = require('../../models');
 const express = require('express');
 const router = express.Router();
-
-
+var Op = models.Sequelize.Op;
 
 function ans_info(spn, ans) { //문제정보 구조체
     this.spn = spn;
@@ -99,8 +99,8 @@ function finalList(ans_list) {
     return final_list;
 }
 
-//exports.ans_list = function(json, index) {
-function ans_list(json, index) {
+exports.ans_list = function(json, index) {
+//function ans_list(json, index) {
     let ans = new Array();
     let cnt = 0, ans_cnt = 0; //객관식 or 주관식 개수, 페이지의 전체 문제 수
     let spn = '', spn_x;
@@ -132,6 +132,3 @@ function ans_list(json, index) {
     let final_list = finalList(ans);
     return final_list;
 }
-
-let final_ans = ans_list(json, 1);
-console.log(final_ans);
