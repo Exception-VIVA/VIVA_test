@@ -72,19 +72,21 @@ router.post('/', async function (req, res, next) {
                 });
                 for (var j in db_data) {
                     let is_correct = false;
+                    //console.log(final_list[j].ans);
+                    //console.log(db_data[j].solutions[0].sol_ans);
                     if (db_data[j].solutions[0].sol_ans == final_list[j].ans) //정답이 맞음
                         is_correct = true;
                     score_arr[j] = new scoring_info(db_data[j].pb_sn, db_data[j].pb_code, db_data[j].solutions[0].sol_sn, is_correct);
                 }
                 to_front[i] = score_arr;
-                console.log(to_front[i]);
+                //console.log(to_front[i]);
             }
             res.send({
-                message: "from flask",
+                message: "scoring result!",
                 status: "success",
                 data: {
                     to_front,
-                    w_sn
+                    w_sn,
                 }
             });
         }

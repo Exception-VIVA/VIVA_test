@@ -19,10 +19,10 @@ function findSpn(spn_list) { //spn만 찾음
     for (var i in spn_list[0]) {
         if (spn_list[0][i] >= '0' && spn_list[0][i] <= '9')
             spn += spn_list[0][i];
-        else
+        else if(spn_list[0][i]=='.')
             break;
     }
-    return spn;
+    return Number(spn);
 }
 
 function refactoringCheck(spn_x, check_list) { //객관식 답안 중복 제거하고 정렬
@@ -56,35 +56,38 @@ function refactoringCheck(spn_x, check_list) { //객관식 답안 중복 제거�
         }
     }
 
-    //빠진 번호 보정
-    if (Math.abs(check_list[0].x_pos - spn_x) > 15) //1번이 빠짐
-        check_list.splice(0, 0, new check_info("uncheck_box", spn_x + 10, Math.min(first_y, second_y)));
-    if(second_y==100000) { //1줄
-        for (var i = 1; i < check_list.length; i++) {
-            if (Math.abs(check_list[i].x_pos - check_list[i - 1].x_pos) > 130) {
-                check_list.splice(i, 0, new check_info("uncheck_box", check_list[i - 1].x_pos + 70, check_list[i - 1].y_pos));
+    if(check_list.length<5) {
+        //빠진 번호 보정
+        if (Math.abs(check_list[0].x_pos - spn_x) > 15) //1번이 빠짐
+            check_list.splice(0, 0, new check_info("uncheck_box", spn_x + 10, Math.min(first_y, second_y)));
+        if (second_y == 100000) { //1줄
+            for (var i = 1; i < check_list.length; i++) {
+                if (Math.abs(check_list[i].x_pos - check_list[i - 1].x_pos) > 130) {
+                    check_list.splice(i, 0, new check_info("uncheck_box", check_list[i - 1].x_pos + 70, check_list[i - 1].y_pos));
+                }
             }
-        }
-    }
-    else{ //2줄
-        for(var i=1;i<check_list.length;i++){
-            if((check_list[i].y_pos==check_list[i-1].y_pos)&&Math.abs(check_list[i].x_pos - check_list[i - 1].x_pos) > 230) //같은 줄
-                check_list.splice(i, 0, new check_info("uncheck_box", check_list[i - 1].x_pos + 120, check_list[i - 1].y_pos));
-            else if(check_list[i].y_pos!=check_list[i-1].y_pos){ //다른 줄
-                if(i<3) //2, 3번이 빠진 상황
+        } else { //2줄
+            for (var i = 1; i < check_list.length; i++) {
+                if ((check_list[i].y_pos == check_list[i - 1].y_pos) && Math.abs(check_list[i].x_pos - check_list[i - 1].x_pos) > 230) //같은 줄
                     check_list.splice(i, 0, new check_info("uncheck_box", check_list[i - 1].x_pos + 120, check_list[i - 1].y_pos));
-                else if(Math.abs(check_list[i].x_pos-check_list[0].x_pos)>20) //4번이 빠진 상황
-                    check_list.splice(i, 0, new check_info("uncheck_box", check_list[i].x_pos - 120, check_list[i].y_pos));
+                else if (check_list[i].y_pos != check_list[i - 1].y_pos) { //다른 줄
+                    if (i < 3) //2, 3번이 빠진 상황
+                        check_list.splice(i, 0, new check_info("uncheck_box", check_list[i - 1].x_pos + 120, check_list[i - 1].y_pos));
+                    else if (Math.abs(check_list[i].x_pos - check_list[0].x_pos) > 20) //4번이 빠진 상황
+                        check_list.splice(i, 0, new check_info("uncheck_box", check_list[i].x_pos - 120, check_list[i].y_pos));
+                }
             }
         }
     }
     return check_list;
 }
 
-function finalList(ans_list) {
+function finalList(ans_list, spn_pos) {
     let final_list = new Array();
+    let first_spn = ans_list[spn_pos].spn-spn_pos;
     for (var i in ans_list) {
-        let spn = Number(ans_list[i].spn); //spn 숫자화
+        let spn = first_spn; //spn 숫자화
+        first_spn++;
         let checked = 0; //답을 뭐라고 했을까
         if (ans_list[i].ans.length == 1)  //길이가 1이라면 주관식
             checked = ans_list[i].ans[0];
@@ -101,6 +104,7 @@ function finalList(ans_list) {
 
 exports.ans_list = function(json, index) {
 //function ans_list(json, index) {
+    let spn_pos;
     let ans = new Array();
     let cnt = 0, ans_cnt = 0; //객관식 or 주관식 개수, 페이지의 전체 문제 수
     let spn = '', spn_x;
@@ -117,18 +121,24 @@ exports.ans_list = function(json, index) {
                 cnt = 0;
                 ans_cnt++;
             }
-            spn_list = new Array();
-            spn_list = cur.recognition_word; //spn에서 찾은 모든 단어
+            if(cur.recognition_word!='null'){
+                spn_list = new Array();
+                spn_list = cur.recognition_word;
+                spn = findSpn(spn_list);
+                spn_pos = ans_cnt;
+            }
+            else
+                spn = 0;
             spn_x = cur.x;
-            spn = findSpn(spn_list);
         } else if (cur.label == "uncheck_box" || cur.label == "check_box") { //객관식 정보 입력
             check_list[cnt] = new check_info(cur.label, cur.x, cur.y);
             cnt++;
         } else if (cur.label == "short_ans") { //주관식 정보 입력
+            //console.log(cur.recognition_word);
             check_list[cnt] = Number(cur.recognition_word);
             cnt++;
         }
     }
-    let final_list = finalList(ans);
+    let final_list = finalList(ans, spn_pos);
     return final_list;
 }
