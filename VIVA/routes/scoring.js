@@ -21,9 +21,10 @@ router.post('/', async function (req, res, next) {
     const split_file_name = file_name.split(',');
     const w_sn = split_file_name[0]; //workbook_sn
     let to_front = new Array();
+    let result_cnt = 0;
     let json;
 
-    const YoloResult = (callback) => {
+    const YoloResult = (callback) => { //여기 수정해야 함
         const options = {
             method: 'POST',
             uri: "http://127.0.0.1:5000/yolo",
@@ -52,7 +53,7 @@ router.post('/', async function (req, res, next) {
             for(var i=0;i<split_file_name.length-1;i++){
                 let final_list = test_list.ans_list(json, i); //실제로 채점할 최종
                 let spn_arr = new Array();
-                let score_arr = new Array();
+                //let score_arr = new Array();
                 for (var j in final_list) //spn만 빼오기
                     spn_arr[j] = final_list[j].spn;
                 const db_data = await models.problem.findAll({
@@ -76,17 +77,18 @@ router.post('/', async function (req, res, next) {
                     //console.log(db_data[j].solutions[0].sol_ans);
                     if (db_data[j].solutions[0].sol_ans == final_list[j].ans) //정답이 맞음
                         is_correct = true;
-                    score_arr[j] = new scoring_info(db_data[j].pb_sn, db_data[j].pb_code, db_data[j].solutions[0].sol_sn, is_correct);
+                    //score_arr[j] = new scoring_info(db_data[j].pb_sn, db_data[j].pb_code, db_data[j].solutions[0].sol_sn, is_correct);
+                    to_front[result_cnt] = new scoring_info(db_data[j].pb_sn, db_data[j].pb_code, db_data[j].solutions[0].sol_sn, is_correct);
+                    result_cnt++;
                 }
-                to_front[i] = score_arr;
+                //to_front[i] = score_arr;
                 //console.log(to_front[i]);
             }
             res.send({
                 message: "scoring result!",
                 status: "success",
                 data: {
-                    to_front,
-                    w_sn,
+                    to_front
                 }
             });
         }

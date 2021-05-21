@@ -16,11 +16,17 @@ function check_info(label, x_pos, y_pos) { //객관식 정보 구조체
 
 function findSpn(spn_list) { //spn만 찾음
     let spn = '';
-    for (var i in spn_list[0]) {
-        if (spn_list[0][i] >= '0' && spn_list[0][i] <= '9')
-            spn += spn_list[0][i];
-        else if(spn_list[0][i]=='.')
-            break;
+    let is_found = false;
+    for (var i in spn_list) {
+        if(!is_found) {
+            for (var j in spn_list[i]) {
+                if (spn_list[i][j] >= '0' && spn_list[i][j] <= '9') {
+                    is_found = true;
+                    spn += spn_list[i][j];
+                } else if (spn_list[i][j] == '.')
+                    break;
+            }
+        }
     }
     return Number(spn);
 }
@@ -56,7 +62,7 @@ function refactoringCheck(spn_x, check_list) { //객관식 답안 중복 제거�
         }
     }
 
-    if(check_list.length<5) {
+    if (check_list.length < 5) {
         //빠진 번호 보정
         if (Math.abs(check_list[0].x_pos - spn_x) > 15) //1번이 빠짐
             check_list.splice(0, 0, new check_info("uncheck_box", spn_x + 10, Math.min(first_y, second_y)));
@@ -84,7 +90,7 @@ function refactoringCheck(spn_x, check_list) { //객관식 답안 중복 제거�
 
 function finalList(ans_list, spn_pos) {
     let final_list = new Array();
-    let first_spn = ans_list[spn_pos].spn-spn_pos;
+    let first_spn = ans_list[spn_pos].spn - spn_pos;
     for (var i in ans_list) {
         let spn = first_spn; //spn 숫자화
         first_spn++;
@@ -102,7 +108,7 @@ function finalList(ans_list, spn_pos) {
     return final_list;
 }
 
-exports.ans_list = function(json, index) {
+exports.ans_list = function (json, index) {
 //function ans_list(json, index) {
     let spn_pos;
     let ans = new Array();
@@ -121,13 +127,12 @@ exports.ans_list = function(json, index) {
                 cnt = 0;
                 ans_cnt++;
             }
-            if(cur.recognition_word!='null'){
+            if (cur.recognition_word != 'null') {
                 spn_list = new Array();
                 spn_list = cur.recognition_word;
                 spn = findSpn(spn_list);
                 spn_pos = ans_cnt;
-            }
-            else
+            } else
                 spn = 0;
             spn_x = cur.x;
         } else if (cur.label == "uncheck_box" || cur.label == "check_box") { //객관식 정보 입력
