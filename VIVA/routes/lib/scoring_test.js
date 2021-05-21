@@ -138,9 +138,16 @@ exports.ans_list = function (json, index) {
         } else if (cur.label == "uncheck_box" || cur.label == "check_box") { //객관식 정보 입력
             check_list[cnt] = new check_info(cur.label, cur.x, cur.y);
             cnt++;
-        } else if (cur.label == "short_ans") { //주관식 정보 입력
-            //console.log(cur.recognition_word);
-            check_list[cnt] = Number(cur.recognition_word);
+        } else if (cur.label == "short_ans") { //주관식 정보 입력, spn처럼 처리해야 함
+            console.log(cur.recognition_word);
+            let word = cur.recognition_word[0];
+            if(word!=undefined) {
+                word = word.replace(/(\s*)/g, "");
+                console.log(word);
+                check_list[cnt] = Number(word);
+            }
+            else
+                check_list[cnt] = 0;
             cnt++;
         }
     }
