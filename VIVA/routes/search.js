@@ -36,9 +36,6 @@ router.get('/', async function (req, res, next) {
             workbook_sn: { //사용자가 보유한 책이 아닌가?
                 [Op.notIn]: book_list
             },
-            workbook_publisher: { //학평 제외
-                [Op.not]: 'Gyoyuk'
-            }
         }
     });
 
