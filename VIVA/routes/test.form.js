@@ -6,7 +6,6 @@ var Op = models.Sequelize.Op;
 //오답노트 가져오기
 //localhost:3001/api/test/form?stu_id=samdol
 router.get('/', async function (req, res, next) {
-    //let body = req.body;
     let result = await models.student.findOne({
         where: {
             stu_id: req.query.stu_id
@@ -67,7 +66,7 @@ router.post('/', async function (req, res, next) {
 
     let result = await models.student.findOne({
         where: {
-            stu_id: req.query.stu_id
+            stu_id: body.stu_id
         }
     });
     const user = result.dataValues.stu_sn;
