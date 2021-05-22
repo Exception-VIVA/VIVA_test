@@ -35,8 +35,7 @@ async function retrieveBook(workbooks, res) {
                 status: 'fail'
             })
         }
-    }
-    else { //교재 없거나 실패한 것임
+    } else { //교재 없거나 실패한 것임
         res.send({
             message: "Null or fail",
             status: 'null'
@@ -70,8 +69,7 @@ router.get('/', async function (req, res, next) {
                 retrievedUser
             }
         });
-    }
-    else {
+    } else {
         res.status(500).send({
             message: "Retrieve fail"
         });
@@ -146,7 +144,7 @@ router.get('/incor-note', async function (req, res, next) {
 
     if (bookInfo.length != 0) {
         var pbCount = new Array();
-        for(var i in bookInfo){
+        for (var i in bookInfo) {
             var temp = await models.incor_problem.count({
                 where: {
                     note_sn: bookInfo[i].dataValues.note_sn
@@ -169,8 +167,7 @@ router.get('/incor-note', async function (req, res, next) {
                 status: 'fail'
             })
         }
-    }
-    else { //교재 없거나 실패한 것임
+    } else { //교재 없거나 실패한 것임
         res.send({
             message: "Null or fail",
             status: 'null'
@@ -196,22 +193,22 @@ router.post('/incor-note', async function (req, res, next) {
         note_name: body.note_name,
         note_photo: body.note_photo
     })
-    .then(result => {
-        res.send({
-          message: 'Inserted in DB',
-          status:'success',
-          data:{ //result는 그냥 내가 postman에서 보려고 넣은거라 실제로 쓸 때는 빼도 괜찮음.
-              result
-          }
+        .then(result => {
+            res.send({
+                message: 'Inserted in DB',
+                status: 'success',
+                data: { //result는 그냥 내가 postman에서 보려고 넣은거라 실제로 쓸 때는 빼도 괜찮음.
+                    result
+                }
+            })
         })
-      })
-      .catch(err => { //무슨 문제가 생겼을까...
-        res.send({
-          message:
-            err.message || "Some error occurred while insert data.",
-          status:'fail'
+        .catch(err => { //무슨 문제가 생겼을까...
+            res.send({
+                message:
+                    err.message || "Some error occurred while insert data.",
+                status: 'fail'
+            });
         });
-      });
 });
 
 module.exports = router;
