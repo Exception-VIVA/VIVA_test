@@ -32,6 +32,8 @@ router.get('/workbook_title', async function (req, res, next) {
 //오답노트 가져오기
 //localhost:3001/api/scoring/result/note_list?stu_id=samdol
 router.get('/note_list', async function (req, res, next) {
+
+
     let result = await models.student.findOne({
         where: {
             stu_id: req.query.stu_id
@@ -77,9 +79,19 @@ router.post('/', async function (req, res, next) {
     let body = req.body;
     let incor_list = body.incor_list;
     incor_list = incor_list.split(',');
-    const stu_sn = incor_list[0]; //stu_sn 잘라오고
+    const stu_id = incor_list[0]; //stu_sn 잘라오고
     const note_sn = incor_list[1]; //note_sn 잘라옴
     incor_list.splice(0, 2);
+
+
+    let result = await models.student.findOne({
+        where: {
+            stu_id: stu_id
+        }
+    });
+    const user = result.dataValues.stu_sn;
+
+
 
     let pb_list = await models.solution.findAll({ //sol_sn 찾아오기
         attributes: ["pb_sn", "sol_sn"],
@@ -92,7 +104,7 @@ router.post('/', async function (req, res, next) {
     let insert_data = new Array();
     for (var i in pb_list) {
         insert_data[i] = {
-            stu_sn: stu_sn,
+            stu_sn: user,
             pb_sn: pb_list[i].pb_sn,
             sol_sn: pb_list[i].sol_sn,
             note_sn: note_sn
