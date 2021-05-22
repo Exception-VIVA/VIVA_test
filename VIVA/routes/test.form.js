@@ -60,7 +60,7 @@ router.get('/', async function (req, res, next) {
 });
 
 //모의고사 생성하기
-//localhost:3001/api/test/form?stu_id=samdol
+//localhost:3001/api/test/form
 router.post('/', async function (req, res, next) {
     let body = req.body;
 
@@ -166,32 +166,30 @@ router.post('/', async function (req, res, next) {
         test_pb.push(temp);
     }
 
-    for (var i = 0; i < 10; i++) {
-        models.test_pb_map.create({
+    let insert_data = new Array();
+    for(var i in test_pb){
+        insert_data[i] = {
             test_sn: sn,
             pb_sn: test_pb[i]
+        }
+    }
+    models.test_pb_map.bulkCreate(insert_data)
+        .then(() => {
+            res.send({
+                message: 'Inserted in test_pb_map',
+                status: 'success',
+                data: {
+                    insert_data
+                }
+            })
         })
-            .catch(err => {
-                console.log(err);
+        .catch(err => { //무슨 문제가 생겼을까...
+            res.send({
+                message:
+                    err.message || "Some error occurred while insert data.",
+                status: 'fail'
             });
-    }
-
-    try {
-        res.send({ //시험지 정보 넘김
-            message: "test created",
-            status: 'success',
-            data: {
-                test_title: body.test_title,
-                student: user,
-                problems: test_pb
-            }
         });
-    } catch (err) { //무언가 문제가 생김
-        res.send({
-            message: "ERROR",
-            status: 'fail'
-        })
-    }
 });
 
 module.exports = router;
