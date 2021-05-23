@@ -52,6 +52,7 @@ router.post('/', async function (req, res, next) {
         async function send_front(split_file_name){
             for(var i=0;i<split_file_name.length-1;i++){
                 let final_list = test_list.ans_list(json, i); //실제로 채점할 최종
+                console.log(final_list);
                 let spn_arr = new Array();
                 //let score_arr = new Array();
                 for (var j in final_list) //spn만 빼오기

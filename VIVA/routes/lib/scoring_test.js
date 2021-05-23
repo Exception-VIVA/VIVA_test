@@ -18,7 +18,7 @@ function findSpn(spn_list) { //spn만 찾음
     let spn = '';
     let is_found = false;
     for (var i in spn_list) {
-        if(!is_found) {
+        if (!is_found) {
             for (var j in spn_list[i]) {
                 if (spn_list[i][j] >= '0' && spn_list[i][j] <= '9') {
                     is_found = true;
@@ -28,6 +28,8 @@ function findSpn(spn_list) { //spn만 찾음
             }
         }
     }
+    if (spn.length == 8) //sn_sw
+        spn = spn.substr(4, 4);
     return Number(spn);
 }
 
@@ -88,9 +90,9 @@ function refactoringCheck(spn_x, check_list) { //객관식 답안 중복 제거�
     return check_list;
 }
 
-function finalList(ans_list, spn_pos) {
+function finalList(ans_list) {
     let final_list = new Array();
-    let first_spn = ans_list[spn_pos].spn - spn_pos;
+    let first_spn = ans_list[0].spn;
     for (var i in ans_list) {
         let spn = first_spn; //spn 숫자화
         first_spn++;
@@ -113,12 +115,12 @@ exports.ans_list = function (json, index) {
     let spn_pos;
     let ans = new Array();
     let cnt = 0, ans_cnt = 0; //객관식 or 주관식 개수, 페이지의 전체 문제 수
-    let spn = '', spn_x;
+    let spn = '', spn_x, first_spn = false;
     let check_list = new Array(); //객관식 또는 주관식 답안 정보
     for (var i in json.yolo_result[index]) {
         let cur = json.yolo_result[index][i];
         let spn_list;
-        if (cur.label == "spn" || cur.label == "page_num") { //한 문제가 끝난 것
+        if (cur.label == "spn" || cur.label == "page_num" || cur.label == "sn_sw" || cur.label == "sw_page_num") { //한 문제가 끝난 것
             if (i > 0) {
                 if (cnt > 1) //객관식 정리
                     check_list = refactoringCheck(spn_x, check_list);
@@ -127,11 +129,12 @@ exports.ans_list = function (json, index) {
                 cnt = 0;
                 ans_cnt++;
             }
-            if (cur.recognition_word != 'null') {
+            if (!first_spn) {
                 spn_list = new Array();
                 spn_list = cur.recognition_word;
+                //console.log(spn_list);
                 spn = findSpn(spn_list);
-                spn_pos = ans_cnt;
+                first_spn = true;
             } else
                 spn = 0;
             spn_x = cur.x;
@@ -139,18 +142,17 @@ exports.ans_list = function (json, index) {
             check_list[cnt] = new check_info(cur.label, cur.x, cur.y);
             cnt++;
         } else if (cur.label == "short_ans") { //주관식 정보 입력, spn처럼 처리해야 함
-            console.log(cur.recognition_word);
+            //console.log(cur.recognition_word);
             let word = cur.recognition_word[0];
-            if(word!=undefined) {
+            if (word != undefined) {
                 word = word.replace(/(\s*)/g, "");
-                console.log(word);
+                //console.log(word);
                 check_list[cnt] = Number(word);
-            }
-            else
+            } else
                 check_list[cnt] = 0;
             cnt++;
         }
     }
-    let final_list = finalList(ans, spn_pos);
+    let final_list = finalList(ans);
     return final_list;
 }
