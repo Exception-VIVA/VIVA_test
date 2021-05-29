@@ -132,7 +132,7 @@ exports.ans_list = function (json, index) {
             if (!first_spn) {
                 spn_list = new Array();
                 spn_list = cur.recognition_word;
-                //console.log(spn_list);
+                console.log(spn_list);
                 spn = findSpn(spn_list);
                 first_spn = true;
             } else
@@ -153,6 +153,7 @@ exports.ans_list = function (json, index) {
             cnt++;
         }
     }
+    //console.log(ans);
     let final_list = finalList(ans);
     return final_list;
 }

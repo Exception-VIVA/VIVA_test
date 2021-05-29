@@ -19,7 +19,7 @@ router.post('/', async function (req, res, next) {
     let body = req.body;
     const file_name = body.file_name;
     const split_file_name = file_name.split(',');
-    const w_sn = split_file_name[0]; //workbook_sn
+    const w_sn = body.workbook_sn;
     let to_front = new Array();
     let result_cnt = 0;
     let json;
@@ -27,7 +27,7 @@ router.post('/', async function (req, res, next) {
     const YoloResult = (callback) => { //여기 수정해야 함
         const options = {
             method: 'POST',
-            uri: "http://127.0.0.1:5000/yolo",
+            uri: "https://viva-yolo.herokuapp.com/yolo",
             qs: {
                 file_name: file_name
             }
@@ -50,7 +50,7 @@ router.post('/', async function (req, res, next) {
         }
         json = JSON.parse(result);
         async function send_front(split_file_name){
-            for(var i=0;i<split_file_name.length-1;i++){
+            for(var i=0;i<split_file_name.length;i++){
                 let final_list = test_list.ans_list(json, i); //실제로 채점할 최종
                 console.log(final_list);
                 let spn_arr = new Array();
