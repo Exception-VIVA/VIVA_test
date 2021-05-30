@@ -1,11 +1,20 @@
+require('dotenv').config({path: __dirname+"/../.env/awsconfig.env"});
 var models = require('../models');
 const express = require('express');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const aws = require('aws-sdk');
-aws.config.loadFromPath(__dirname + "/../config/awsconfig.json");
-const s3 = new aws.S3();
-
+//aws.config.loadFromPath(__dirname + "/../config/awsconfig.env");
+// aws.config.update({
+//   accessKeyId: process.env.accessKeyId,
+//   secretAccessKey: process.env.secretAccessKey,
+//   region: process.env.region
+// });
+const s3 = new aws.S3({
+  accessKeyId: process.env.accessKeyId,
+  secretAccessKey: process.env.secretAccessKey,
+  region: process.env.region
+});
 const router = express.Router();
 var Op = models.Sequelize.Op;
 var fs = require('fs');
